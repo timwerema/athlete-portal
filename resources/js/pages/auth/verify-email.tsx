@@ -1,40 +1,51 @@
-// Components
-import { Head, useForm } from '@inertiajs/react';
+import Notice from '@/components/notice';
+import { Button } from '@/components/ui/button';
+import AuthLayout from '@/layouts/auth-layout';
+import { SharedData } from '@/types';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import AuthLayout from '@/layouts/auth-layout';
-
 export default function VerifyEmail({ status }: { status?: string }) {
+    const { auth } = usePage<SharedData>().props;
     const { post, processing } = useForm({});
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('verification.send'));
     };
 
     return (
-        <AuthLayout title="Verify email" description="Please verify your email address by clicking on the link we just emailed to you.">
-            <Head title="Email verification" />
+        <AuthLayout
+            title="Check your email"
+            description={
+                <>
+                    We sent a link to <strong className="text-foreground">{auth.user?.email}</strong>. Open it to confirm the address is yours, then
+                    you can start your profile.
+                </>
+            }
+        >
+            <Head title="Confirm your email" />
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address you provided during registration.
-                </div>
+                <Notice className="mb-6">
+                    <p role="status">A new link is on its way.</p>
+                </Notice>
             )}
 
-            <form onSubmit={submit} className="space-y-6 text-center">
-                <Button disabled={processing} variant="secondary">
-                    {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
-                    Resend verification email
+            <form onSubmit={submit} className="grid gap-4">
+                <Button type="submit" size="lg" variant="outline" disabled={processing}>
+                    {processing && <LoaderCircle className="animate-spin" aria-hidden="true" />}
+                    Send the link again
                 </Button>
-
-                <TextLink href={route('logout')} method="post" className="mx-auto block text-sm">
+                <Link
+                    href={route('logout')}
+                    method="post"
+                    as="button"
+                    className="text-muted-foreground min-h-11 cursor-pointer text-sm underline underline-offset-4"
+                >
                     Log out
-                </TextLink>
+                </Link>
             </form>
         </AuthLayout>
     );

@@ -10,39 +10,56 @@ class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_login_screen_can_be_rendered()
+    public function test_login_screen_can_be_rendered(): void
     {
-        $response = $this->get('/login');
-
-        $response->assertStatus(200);
+        $this->get('/login')->assertStatus(200);
     }
 
-    public function test_users_can_authenticate_using_the_login_screen()
+    public function test_users_can_authenticate_using_the_login_screen(): void
     {
         $user = User::factory()->create();
 
-        $response = $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+        $response = $this->post('/login', ['email' => $user->email, 'password' => 'password']);
 
-        $this->assertAuthenticated();
+        $this->assertAuthenticatedAs($user);
         $response->assertRedirect(route('dashboard', absolute: false));
     }
 
-    public function test_users_can_not_authenticate_with_invalid_password()
+    public function test_users_can_not_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();
 
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'wrong-password',
-        ]);
+        $this->post('/login', ['email' => $user->email, 'password' => 'wrong-password'])
+            ->assertSessionHasErrors('email');
 
         $this->assertGuest();
     }
 
-    public function test_users_can_logout()
+    public function test_unknown_email_gets_the_same_error_as_a_wrong_password(): void
+    {
+        $this->post('/login', ['email' => 'nobody@example.com', 'password' => 'whatever'])
+            ->assertSessionHasErrors(['email' => __('auth.failed')]);
+
+        $this->assertGuest();
+    }
+
+    public function test_login_locks_after_five_bad_passwords(): void
+    {
+        $user = User::factory()->create();
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->post('/login', ['email' => $user->email, 'password' => 'wrong-password']);
+        }
+
+        // Even the right password is refused while locked out.
+        $response = $this->post('/login', ['email' => $user->email, 'password' => 'password']);
+
+        $response->assertSessionHasErrors('email');
+        $this->assertStringContainsString('Too many', session('errors')->first('email'));
+        $this->assertGuest();
+    }
+
+    public function test_users_can_logout(): void
     {
         $user = User::factory()->create();
 

@@ -1,45 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-export type Appearance = 'light' | 'dark' | 'system';
+import { Appearance, readAppearance, resolvesToDark } from './use-appearance-logic';
 
-const prefersDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+export type { Appearance };
 
-const applyTheme = (appearance: Appearance) => {
-    const isDark = appearance === 'dark' || (appearance === 'system' && prefersDark());
+const COOKIE = 'appearance';
+const mediaQuery = () => window.matchMedia('(prefers-color-scheme: dark)');
 
-    document.documentElement.classList.toggle('dark', isDark);
-};
+function apply(appearance: Appearance) {
+    document.documentElement.classList.toggle('dark', resolvesToDark(appearance, mediaQuery().matches));
+}
 
-const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-const handleSystemThemeChange = () => {
-    const currentAppearance = localStorage.getItem('appearance') as Appearance;
-    applyTheme(currentAppearance || 'system');
-};
+function onSystemChange() {
+    apply(readAppearance(document.cookie));
+}
 
 export function initializeTheme() {
-    const savedAppearance = (localStorage.getItem('appearance') as Appearance) || 'system';
-
-    applyTheme(savedAppearance);
-
-    // Add the event listener for system theme changes...
-    mediaQuery.addEventListener('change', handleSystemThemeChange);
+    apply(readAppearance(document.cookie));
+    mediaQuery().addEventListener('change', onSystemChange);
 }
 
 export function useAppearance() {
-    const [appearance, setAppearance] = useState<Appearance>('system');
-
-    const updateAppearance = (mode: Appearance) => {
-        setAppearance(mode);
-        localStorage.setItem('appearance', mode);
-        applyTheme(mode);
-    };
+    const [appearance, setAppearance] = useState<Appearance>('dark');
 
     useEffect(() => {
-        const savedAppearance = localStorage.getItem('appearance') as Appearance | null;
-        updateAppearance(savedAppearance || 'system');
+        setAppearance(readAppearance(document.cookie));
+    }, []);
 
-        return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
+    const updateAppearance = useCallback((mode: Appearance) => {
+        setAppearance(mode);
+        // A plain preference cookie so the server can render the right theme first time. No personal data.
+        const secure = window.location.protocol === 'https:' ? ';Secure' : '';
+        document.cookie = `${COOKIE}=${mode};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax${secure}`;
+        apply(mode);
     }, []);
 
     return { appearance, updateAppearance };
