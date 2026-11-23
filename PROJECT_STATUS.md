@@ -41,8 +41,13 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 - Static analysis in CI, accessibility audit
 - Later versions: other sports, high-school recruits with parent consent, coach accounts
 
+## Decided by Timasi
+
+- Name: Second Half
+- Palette: purple, grey, black and white
+- Coach contact form stays in version one as built (only people the athlete sent the link to can use it; coaches are told they are responsible for their own contact rules)
+
 ## Blocked on Timasi
 
-- Whether the coach contact form should stay in version one (possible rules concern for coaches)
 - Review of privacy notice and terms wording; a contact email address
 - Hosting and mail provider (nothing is deployed)
