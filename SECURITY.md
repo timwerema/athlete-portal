@@ -43,7 +43,7 @@ Rate limits are defined in `app/Providers/AppServiceProvider.php`.
 8. **YouTube and Vimeo players** load from those companies and can set their own cookies. No consent prompt exists yet; decide before launch.
 9. **Mail is sent during the request.** If the mail provider is slow, the coach waits. The message is saved first, so it is never lost.
 10. **Developer-only tooling** (ESLint chain) has open `npm audit` advisories. Nothing vulnerable ships to users (`npm audit --omit=dev` is clean as of 23 Nov 2026).
-11. **Not yet done:** static analysis (Larastan/Psalm), a real accessibility audit with assistive technology, load testing, an independent security review, verification on MariaDB (the CI job exists but has not run).
+11. **Not yet done:** static analysis (Larastan/Psalm), a real accessibility audit with assistive technology, load testing, an independent security review.
 
 ## Before production (checklist)
 

@@ -5,6 +5,7 @@ Last updated: 23 November 2026. Product name: Second Half (chosen by Timasi; tra
 ## Implemented and tested
 
 Automated: 174 back-end tests (run on SQLite and on PostgreSQL 16) and 14 front-end unit tests.
+CI on GitHub passes: tests, audits, secret scan, and migrations on MariaDB 11 and PostgreSQL 16.
 Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, dark and light.
 
 | Feature | Automated tests | Checked in browser |
@@ -30,9 +31,7 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 - Embedded YouTube/Vimeo players actually playing (this build environment cannot reach those sites; the frame is created with the right address).
 - Hudl embeds: not built. Hudl links show as plain links because no embed address has been verified.
 - Real email delivery (only the log mailer has been used).
-- Migrations on MariaDB (CI job written, not yet run).
-- Real phones and Safari; screen readers. Colour pairs were chosen for AA contrast but no audit tool has been run.
-- The CI workflow itself (it has never run, because the code is not on GitHub yet).
+- Real phones and Safari; screen readers. Colour pairs were calculated to meet AA contrast (purple, grey, black, white palette), but no audit tool has been run on the pages.
 
 ## Planned
 
