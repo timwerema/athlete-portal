@@ -53,8 +53,9 @@ class SecurityHeaders
             'Content-Security-Policy' => implode('; ', $policy),
             'X-Content-Type-Options' => 'nosniff',
             'X-Frame-Options' => 'DENY',
-            // The share link is a secret in the address, so never pass it on to other sites.
-            'Referrer-Policy' => 'no-referrer',
+            // The share link is a secret in the address, so it is never passed on to other sites.
+            // (Same-site requests keep it, because "go back after saving" relies on it.)
+            'Referrer-Policy' => 'same-origin',
             'Permissions-Policy' => 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()',
             'Cross-Origin-Opener-Policy' => 'same-origin',
         ];

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\PhotoStorage;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,6 +39,16 @@ class User extends Authenticatable implements MustVerifyEmail
             'two_factor_recovery_codes' => 'encrypted:array',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // However an account is removed, its private photo file goes too.
+        static::deleting(function (User $user) {
+            if ($user->profile) {
+                PhotoStorage::remove($user->profile);
+            }
+        });
     }
 
     public function profile(): HasOne

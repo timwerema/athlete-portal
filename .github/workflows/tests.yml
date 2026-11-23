@@ -1,53 +1,105 @@
-name: tests
+name: checks
 
 on:
   push:
-    branches:
-      - develop
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - develop
-      - main
+
+permissions:
+  contents: read
 
 jobs:
-  ci:
+  secrets:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v4
         with:
-          php-version: 8.4
-          tools: composer:v2
-          coverage: xdebug
+          fetch-depth: 0
+      - name: Scan for committed secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: gd, exif, zip, sqlite3, pdo_sqlite
+          tools: composer:v2
+          coverage: none
+
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: npm
 
-      - name: Install Node Dependencies
-        run: npm ci
+      - run: composer install --no-interaction --prefer-dist
+      - run: npm ci
 
-      - name: Build Assets
+      - name: Dependency audit (PHP)
+        run: composer audit
+
+      - name: Dependency audit (JavaScript that ships to users)
+        run: npm audit --omit=dev --audit-level=moderate
+
+      - name: Dependency audit (developer tools, report only)
+        run: npm audit || true
+
+      - name: PHP code style
+        run: vendor/bin/pint --test
+
+      - name: Front-end format, lint and types
+        run: |
+          npm run format:check
+          npm run lint:check
+          npm run types
+
+      - name: Front-end tests
+        run: npm test
+
+      - name: Build
         run: npm run build
 
-      - name: Create SQLite Database
-        run: touch database/database.sqlite
+      - name: Back-end tests
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan test
 
-      - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Copy Environment File
-        run: cp .env.example .env
-
-      - name: Generate Application Key
-        run: php artisan key:generate
-
-      - name: Tests
-        run: ./vendor/bin/phpunit
+  # Proves the migrations also run on the two databases hosting might use.
+  migrations:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_DATABASE: app
+          MARIADB_ROOT_PASSWORD: ci-only
+        ports: ['3306:3306']
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-retries=20
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: app
+          POSTGRES_PASSWORD: ci-only
+        ports: ['5432:5432']
+        options: --health-cmd="pg_isready" --health-interval=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, pdo_pgsql, gd
+          coverage: none
+      - run: composer install --no-interaction --prefer-dist
+      - run: cp .env.example .env && php artisan key:generate
+      - name: MariaDB
+        run: php artisan migrate:fresh --seed --force && php artisan migrate:rollback --force
+        env: { DB_CONNECTION: mariadb, DB_HOST: 127.0.0.1, DB_PORT: 3306, DB_DATABASE: app, DB_USERNAME: root, DB_PASSWORD: ci-only }
+      - name: PostgreSQL
+        run: php artisan migrate:fresh --seed --force && php artisan migrate:rollback --force
+        env: { DB_CONNECTION: pgsql, DB_HOST: 127.0.0.1, DB_PORT: 5432, DB_DATABASE: app, DB_USERNAME: postgres, DB_PASSWORD: ci-only }

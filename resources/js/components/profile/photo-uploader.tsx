@@ -2,6 +2,7 @@ import ConfirmAction from '@/components/confirm-action';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { initials } from '@/lib/format';
+import { shrinkImage } from '@/lib/shrink-image';
 import { router } from '@inertiajs/react';
 import { LoaderCircle, Trash2, Upload } from 'lucide-react';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -19,21 +20,25 @@ export default function PhotoUploader({ hasPhoto, version, name, maxKilobytes }:
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string>();
 
-    const choose = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
+    const choose = async (e: ChangeEvent<HTMLInputElement>) => {
+        const original = e.target.files?.[0];
         e.target.value = '';
 
-        if (!file) {
-            return;
-        }
-
-        if (file.size > maxKilobytes * 1024) {
-            setError(`That photo is too big. Please use one under ${Math.floor(maxKilobytes / 1024)} MB.`);
+        if (!original) {
             return;
         }
 
         setError(undefined);
         setBusy(true);
+
+        const file = await shrinkImage(original);
+
+        if (file.size > maxKilobytes * 1024) {
+            setError(`That photo is too big. Please use one under ${Math.floor(maxKilobytes / 1024)} MB.`);
+            setBusy(false);
+            return;
+        }
+
         router.post(
             route('profile.photo.store'),
             { photo: file },
@@ -107,8 +112,7 @@ export default function PhotoUploader({ hasPhoto, version, name, maxKilobytes }:
                 </div>
             </div>
             <p className="text-muted-foreground text-sm">
-                JPEG, PNG or WebP, up to {Math.floor(maxKilobytes / 1024)} MB. A clear head-and-shoulders or action shot works best. We remove hidden
-                location data from the file.
+                JPEG, PNG or WebP. A clear head-and-shoulders or action shot works best. We remove hidden location data from the file.
             </p>
             <InputError message={error} />
         </div>

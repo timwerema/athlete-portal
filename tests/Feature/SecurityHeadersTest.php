@@ -49,7 +49,7 @@ class SecurityHeadersTest extends TestCase
 
         $response->assertHeader('X-Content-Type-Options', 'nosniff');
         $response->assertHeader('X-Frame-Options', 'DENY');
-        $response->assertHeader('Referrer-Policy', 'no-referrer');
+        $response->assertHeader('Referrer-Policy', 'same-origin');
         $this->assertStringContainsString('geolocation=()', $response->headers->get('Permissions-Policy'));
         $this->assertStringContainsString('camera=()', $response->headers->get('Permissions-Policy'));
     }

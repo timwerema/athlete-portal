@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readAppearance, resolvesToDark } from '../hooks/use-appearance-logic';
 import { cmToFeetInches, feetInchesToCm, formatDate, formatHeight, formatStat, formatYears, initials } from './format';
+import { fitWithin } from './shrink-image';
 
 describe('height', () => {
     it('converts centimetres to feet and inches', () => {
@@ -88,5 +89,14 @@ describe('appearance', () => {
         expect(resolvesToDark('system', false)).toBe(false);
         expect(resolvesToDark('light', true)).toBe(false);
         expect(resolvesToDark('dark', false)).toBe(true);
+    });
+});
+
+describe('photo shrinking', () => {
+    it('keeps the shape and never enlarges', () => {
+        expect(fitWithin(4000, 3000, 1600)).toEqual({ width: 1600, height: 1200 });
+        expect(fitWithin(3000, 4000, 1600)).toEqual({ width: 1200, height: 1600 });
+        expect(fitWithin(800, 600, 1600)).toEqual({ width: 800, height: 600 });
+        expect(fitWithin(5000, 1, 1600)).toEqual({ width: 1600, height: 1 });
     });
 });

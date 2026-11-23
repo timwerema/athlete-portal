@@ -188,7 +188,30 @@ export default function ShareShow({ profile, mode, contact }: ShowProps) {
             show: profile.season_stats.length > 0,
             body: () => (
                 <>
-                    <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+                    {/* Phones: one block per season, so no sideways scrolling. */}
+                    <ul className="sm:hidden print:hidden">
+                        {profile.season_stats.map((s, i) => (
+                            <li key={i} className="border-b py-4 first:pt-0">
+                                <p>
+                                    <span className="numeral font-medium">{s.season}</span>
+                                    <span className="text-muted-foreground text-sm"> · {[s.team, s.competition].filter(Boolean).join(' · ')}</span>
+                                </p>
+                                <dl className="mt-3 grid grid-cols-5 gap-x-2 gap-y-3">
+                                    {profile.stat_fields.map((f) => (
+                                        <div key={f.key}>
+                                            <dt className="kicker !text-[0.65rem]">
+                                                <abbr title={f.label} className="no-underline">
+                                                    {f.short}
+                                                </abbr>
+                                            </dt>
+                                            <dd className="numeral text-lg">{formatStat(s.stats[f.key], f.key)}</dd>
+                                        </div>
+                                    ))}
+                                </dl>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="hidden overflow-x-auto sm:block print:block">
                         <table className="w-full min-w-max border-collapse text-left">
                             <caption className="sr-only">Statistics by season</caption>
                             <thead>
@@ -379,7 +402,6 @@ export default function ShareShow({ profile, mode, contact }: ShowProps) {
         <div className="min-h-dvh">
             <Head title={mode === 'demo' ? 'Sample profile' : `${name} · ${profile.sport} profile`}>
                 <meta name="robots" content="noindex, nofollow, noarchive" />
-                <meta name="referrer" content="no-referrer" />
             </Head>
 
             {banner[mode] && (
