@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 23 November 2026. Working name: "Athlete Profiles" (final name not chosen).
+Last updated: 23 November 2026. Product name: Second Half (chosen by Timasi; trademark and domain not yet checked).
 
 ## Implemented and tested
 
@@ -44,8 +44,6 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 
 ## Blocked on Timasi
 
-- Product name (three options offered)
-- GitHub repository to push to
 - Whether the coach contact form should stay in version one (possible rules concern for coaches)
 - Review of privacy notice and terms wording; a contact email address
 - Hosting and mail provider (nothing is deployed)

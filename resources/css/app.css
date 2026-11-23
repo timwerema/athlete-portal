@@ -58,46 +58,48 @@
 }
 
 /*
-  Colour system. Dark is the default look: the pitch under floodlights.
-  Light is paper and ink, for daylight and for printing.
+  Colour system: purple, grey, black and white.
+  Dark (the default) is black with a light purple accent.
+  Light is white with a deep purple accent.
   Every text/background pair below is at least 4.5:1.
+  Red is kept for errors and destructive buttons only, so problems are never signalled by purple alone.
 */
 :root {
-    --background: #f4f2e9;
-    --surface: #fbfaf5;
-    --foreground: #111813;
-    --muted-foreground: #4d5850;
-    --primary: #15452d;
-    --primary-foreground: #f6f5ee;
-    --secondary: #e8e5d8;
-    --destructive: #a8261d;
+    --background: #ffffff;
+    --surface: #f6f6f8;
+    --foreground: #0d0d10;
+    --muted-foreground: #54545e;
+    --primary: #5a2bd4;
+    --primary-foreground: #ffffff;
+    --secondary: #ececf0;
+    --destructive: #b3261e;
     --destructive-foreground: #ffffff;
-    --danger-text: #a8261d;
-    --good-text: #15613a;
-    --mark: #d6f24f;
-    --mark-foreground: #111813;
-    --border: #d5d2c3;
-    --input: #8b9188;
-    --ring: #15452d;
+    --danger-text: #b3261e;
+    --good-text: #4a22b3;
+    --mark: #e3d8ff;
+    --mark-foreground: #0d0d10;
+    --border: #d8d8df;
+    --input: #85858f;
+    --ring: #5a2bd4;
 }
 
 .dark {
-    --background: #0b100e;
-    --surface: #121915;
-    --foreground: #eceee5;
-    --muted-foreground: #a4ad9f;
-    --primary: #d6f24f;
-    --primary-foreground: #0f1509;
-    --secondary: #1b2420;
+    --background: #0a0a0c;
+    --surface: #141417;
+    --foreground: #f4f4f6;
+    --muted-foreground: #a9a9b3;
+    --primary: #b9a0ff;
+    --primary-foreground: #0d0817;
+    --secondary: #1e1e23;
     --destructive: #ff7b6e;
     --destructive-foreground: #1a0705;
     --danger-text: #ff8f84;
-    --good-text: #9fe3b4;
-    --mark: #d6f24f;
-    --mark-foreground: #0f1509;
-    --border: #28332d;
-    --input: #6f7b72;
-    --ring: #d6f24f;
+    --good-text: #cdbcff;
+    --mark: #b9a0ff;
+    --mark-foreground: #0d0817;
+    --border: #2b2b32;
+    --input: #74747f;
+    --ring: #b9a0ff;
 }
 
 @layer base {

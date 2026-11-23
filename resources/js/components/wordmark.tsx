@@ -13,7 +13,7 @@ export default function Wordmark({ className }: { className?: string }) {
                 <path d="M10 1.25v17.5" stroke="currentColor" strokeWidth="1.5" />
                 <circle cx="10" cy="10" r="2.6" className="fill-primary" />
             </svg>
-            {name ?? 'Athlete Profiles'}
+            {name ?? 'Second Half'}
         </span>
     );
 }

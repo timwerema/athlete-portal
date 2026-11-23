@@ -1,4 +1,4 @@
-# Athlete Profiles (working name)
+# Second Half
 
 A private recruiting profile for college athletes. An athlete builds one clean profile and shares it
 with coaches through a secret link they control. Version one is for **current college soccer players

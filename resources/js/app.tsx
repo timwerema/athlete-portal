@@ -17,7 +17,7 @@ if (nonce) {
     setNonce(nonce);
 }
 
-const appName = import.meta.env.VITE_APP_NAME || 'Athlete Profiles';
+const appName = import.meta.env.VITE_APP_NAME || 'Second Half';
 
 createInertiaApp({
     title: (title) => (title ? `${title} · ${appName}` : appName),
