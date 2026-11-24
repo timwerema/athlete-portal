@@ -56,6 +56,7 @@ class DataController extends Controller
             'account' => [
                 'name' => $user->name,
                 'email' => $user->email,
+                'email_change_waiting_for_confirmation' => $user->pending_email,
                 'email_verified_at' => $user->email_verified_at?->toIso8601String(),
                 'confirmed_18_or_over_at' => $user->age_confirmed_at?->toIso8601String(),
                 'two_step_login' => $user->hasTwoFactorEnabled(),

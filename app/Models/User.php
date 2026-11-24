@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'two_factor_secret',
         'two_factor_recovery_codes',
         'two_factor_last_step',
+        'pending_email',
     ];
 
     protected function casts(): array

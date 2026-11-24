@@ -400,9 +400,10 @@ function History({ profile, options }: SectionProps) {
     return (
         <ItemSection<Team, { kind: string; name: string; detail: string; start_year: number | null; end_year: number | null }>
             type="teams"
+            orderable
             noun="team"
             items={profile.teams}
-            emptyText="No teams yet. Add your college, club and high school teams, newest first."
+            emptyText="No teams yet. Add your college, club and high school teams. You can put them in any order."
             blank={{ kind: 'college', name: '', detail: '', start_year: null, end_year: null }}
             toForm={(t) => ({ kind: t.kind, name: t.name, detail: t.detail ?? '', start_year: t.start_year, end_year: t.end_year })}
             summary={(t) => (
@@ -563,6 +564,7 @@ function Honours({ profile }: SectionProps) {
     return (
         <ItemSection<Honour, { title: string; year: number | null }>
             type="honours"
+            orderable
             noun="honour"
             items={profile.honours}
             emptyText="No honours yet. All-conference teams, academic awards, captaincies and similar."
@@ -599,6 +601,7 @@ function Videos({ profile, options }: SectionProps) {
         <>
             <ItemSection<VideoItem, { kind: string; title: string; url: string }>
                 type="videos"
+                orderable
                 noun="video link"
                 items={profile.videos}
                 emptyText="No video yet. A two to four minute highlight reel is the first thing most coaches open."
@@ -660,6 +663,7 @@ function References({ profile }: SectionProps) {
         <>
             <ItemSection<Reference, { name: string; role: string; organization: string; contact: string; consent: boolean }>
                 type="references"
+                orderable
                 noun="reference"
                 items={profile.references}
                 emptyText="No references yet. A club coach, trainer or teacher who knows you well."

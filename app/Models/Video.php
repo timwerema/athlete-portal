@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Video extends Model
 {
-    protected $fillable = ['kind', 'title', 'url'];
+    protected $fillable = ['position', 'kind', 'title', 'url'];
 
     public const KINDS = ['highlight' => 'Highlights', 'full_match' => 'Full match'];
 

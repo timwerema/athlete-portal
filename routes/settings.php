@@ -13,6 +13,12 @@ Route::middleware('auth')->group(function () {
     Route::get('settings/account', [ProfileController::class, 'edit'])->name('account.edit');
     Route::patch('settings/account', [ProfileController::class, 'update'])->middleware('throttle:account-write')->name('account.update');
 
+    Route::get('settings/account/confirm-email/{id}/{hash}', [ProfileController::class, 'confirmEmail'])
+        ->whereNumber('id')
+        ->middleware(['signed', 'throttle:account-write'])
+        ->name('account.email.confirm');
+    Route::delete('settings/account/pending-email', [ProfileController::class, 'cancelEmail'])->middleware('throttle:account-write')->name('account.email.cancel');
+
     Route::get('settings/password', [PasswordController::class, 'edit'])->name('password.edit');
     Route::put('settings/password', [PasswordController::class, 'update'])->middleware('throttle:account-write')->name('password.update');
 

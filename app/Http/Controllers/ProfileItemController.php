@@ -8,6 +8,7 @@ use App\Models\Video;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
@@ -22,6 +23,9 @@ class ProfileItemController extends Controller
 
     public const TYPES = ['teams', 'stats', 'honours', 'videos', 'references'];
 
+    /** Lists the athlete can put in their own order. Stats stay sorted by season. */
+    public const ORDERABLE = ['teams', 'honours', 'videos', 'references'];
+
     public function store(Request $request, string $type): RedirectResponse
     {
         $profile = $request->user()->profileOrCreate();
@@ -31,7 +35,13 @@ class ProfileItemController extends Controller
             throw ValidationException::withMessages(['limit' => 'You have reached the limit of '.self::MAX_ITEMS.' entries here.']);
         }
 
-        $relation->create($this->validated($request, $profile, $type));
+        $item = $relation->make($this->validated($request, $profile, $type));
+
+        if (in_array($type, self::ORDERABLE, true)) {
+            $item->position = ((int) $this->relation($profile, $type)->max('position')) + 1;
+        }
+
+        $item->save();
 
         return back()->with('status', 'Added.');
     }
@@ -54,6 +64,38 @@ class ProfileItemController extends Controller
         $this->relation($profile, $type)->findOrFail($id)->delete();
 
         return back()->with('status', 'Removed.');
+    }
+
+    /** Move one entry up or down by swapping places with its neighbour. */
+    public function move(Request $request, string $type, int $id): RedirectResponse
+    {
+        abort_unless(in_array($type, self::ORDERABLE, true), 404);
+
+        $data = $request->validate(['direction' => ['required', Rule::in(['up', 'down'])]]);
+        $profile = $request->user()->profileOrCreate();
+
+        DB::transaction(function () use ($profile, $type, $id, $data) {
+            $items = $this->relation($profile, $type)->lockForUpdate()->get()->values();
+            $index = $items->search(fn ($item) => $item->getKey() === $id);
+
+            abort_if($index === false, 404);
+
+            $target = $data['direction'] === 'up' ? $index - 1 : $index + 1;
+
+            if (! $items->has($target)) {
+                return;
+            }
+
+            $ordered = $items->all();
+            [$ordered[$index], $ordered[$target]] = [$ordered[$target], $ordered[$index]];
+
+            // Renumber the whole list so positions are always 1, 2, 3 with no ties.
+            foreach ($ordered as $position => $item) {
+                $item->forceFill(['position' => $position + 1])->save();
+            }
+        });
+
+        return back();
     }
 
     private function relation(Profile $profile, string $type): HasMany

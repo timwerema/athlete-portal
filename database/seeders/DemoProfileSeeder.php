@@ -54,9 +54,9 @@ class DemoProfileSeeder extends Seeder
 
         $profile->teams()->delete();
         $profile->teams()->createMany([
-            ['kind' => 'college', 'name' => 'Calder Valley University (fictional)', 'detail' => 'NCAA Division II', 'start_year' => 2025, 'end_year' => null],
-            ['kind' => 'club', 'name' => 'Harbour City FC (fictional)', 'detail' => 'Under-19 regional league', 'start_year' => 2021, 'end_year' => 2025],
-            ['kind' => 'high_school', 'name' => 'Eastfield High School (fictional)', 'detail' => 'Varsity, captain in final year', 'start_year' => 2021, 'end_year' => 2025],
+            ['position' => 1, 'kind' => 'college', 'name' => 'Calder Valley University (fictional)', 'detail' => 'NCAA Division II', 'start_year' => 2025, 'end_year' => null],
+            ['position' => 2, 'kind' => 'club', 'name' => 'Harbour City FC (fictional)', 'detail' => 'Under-19 regional league', 'start_year' => 2021, 'end_year' => 2025],
+            ['position' => 3, 'kind' => 'high_school', 'name' => 'Eastfield High School (fictional)', 'detail' => 'Varsity, captain in final year', 'start_year' => 2021, 'end_year' => 2025],
         ]);
 
         $profile->seasonStats()->delete();
@@ -67,9 +67,9 @@ class DemoProfileSeeder extends Seeder
 
         $profile->honours()->delete();
         $profile->honours()->createMany([
-            ['title' => 'All-Conference Second Team (sample)', 'year' => 2026],
-            ['title' => 'Conference Academic Honour Roll (sample)', 'year' => 2026],
-            ['title' => 'Team Newcomer of the Year (sample)', 'year' => 2025],
+            ['position' => 1, 'title' => 'All-Conference Second Team (sample)', 'year' => 2026],
+            ['position' => 2, 'title' => 'Conference Academic Honour Roll (sample)', 'year' => 2026],
+            ['position' => 3, 'title' => 'Team Newcomer of the Year (sample)', 'year' => 2025],
         ]);
     }
 }

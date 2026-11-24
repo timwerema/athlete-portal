@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProfileTeam extends Model
 {
-    protected $fillable = ['kind', 'name', 'detail', 'start_year', 'end_year'];
+    protected $fillable = ['position', 'kind', 'name', 'detail', 'start_year', 'end_year'];
 
     public const KINDS = ['college' => 'College', 'club' => 'Club', 'high_school' => 'High school', 'national' => 'National team'];
 

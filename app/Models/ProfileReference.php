@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProfileReference extends Model
 {
-    protected $fillable = ['name', 'role', 'organization', 'contact', 'consent_confirmed_at'];
+    protected $fillable = ['position', 'name', 'role', 'organization', 'contact', 'consent_confirmed_at'];
 
     protected function casts(): array
     {

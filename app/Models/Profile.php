@@ -90,7 +90,7 @@ class Profile extends Model
 
     public function teams(): HasMany
     {
-        return $this->hasMany(ProfileTeam::class)->orderByRaw('end_year is null desc')->orderByDesc('end_year')->orderByDesc('start_year');
+        return $this->hasMany(ProfileTeam::class)->orderBy('position')->orderBy('id');
     }
 
     public function seasonStats(): HasMany
@@ -100,17 +100,17 @@ class Profile extends Model
 
     public function honours(): HasMany
     {
-        return $this->hasMany(Honour::class)->orderByDesc('year')->orderBy('id');
+        return $this->hasMany(Honour::class)->orderBy('position')->orderBy('id');
     }
 
     public function videos(): HasMany
     {
-        return $this->hasMany(Video::class)->orderBy('kind', 'desc')->orderBy('id');
+        return $this->hasMany(Video::class)->orderBy('position')->orderBy('id');
     }
 
     public function references(): HasMany
     {
-        return $this->hasMany(ProfileReference::class)->orderBy('id');
+        return $this->hasMany(ProfileReference::class)->orderBy('position')->orderBy('id');
     }
 
     public function shareLinks(): HasMany

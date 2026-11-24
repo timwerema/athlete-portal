@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/', [ProfileItemController::class, 'store'])->name('profile.items.store');
             Route::put('{id}', [ProfileItemController::class, 'update'])->whereNumber('id')->name('profile.items.update');
             Route::delete('{id}', [ProfileItemController::class, 'destroy'])->whereNumber('id')->name('profile.items.destroy');
+            Route::post('{id}/move', [ProfileItemController::class, 'move'])->whereNumber('id')->name('profile.items.move');
         });
 
         Route::put('profile/{section}', [ProfileController::class, 'update'])->name('profile.update');

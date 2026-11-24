@@ -15,7 +15,7 @@ export default function FlashStatus() {
         }
 
         setVisible(status);
-        const timer = window.setTimeout(() => setVisible(null), 5000);
+        const timer = window.setTimeout(() => setVisible(null), Math.max(5000, status.length * 90));
 
         return () => window.clearTimeout(timer);
     }, [status, page]);

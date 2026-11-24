@@ -2,7 +2,7 @@ import ConfirmAction from '@/components/confirm-action';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
 import { InertiaFormProps, router, useForm } from '@inertiajs/react';
-import { LoaderCircle, Pencil, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, LoaderCircle, Pencil, Plus, Trash2 } from 'lucide-react';
 import { FormEventHandler, ReactNode, useState } from 'react';
 
 type FormData = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -14,6 +14,8 @@ interface ItemSectionProps<T extends { id: number }, F extends FormData> {
     blank: F;
     toForm: (item: T) => F;
     noun: string;
+    /** Show move up / move down buttons so the athlete sets the order. */
+    orderable?: boolean;
     emptyText: string;
     summary: (item: T) => ReactNode;
     fields: (form: InertiaFormProps<F>, editing: boolean) => ReactNode;
@@ -78,12 +80,23 @@ export default function ItemSection<T extends { id: number }, F extends FormData
     blank,
     toForm,
     noun,
+    orderable,
     emptyText,
     summary,
     fields,
 }: ItemSectionProps<T, F>) {
     const [editing, setEditing] = useState<number | 'new' | null>(null);
     const [removing, setRemoving] = useState(false);
+    const [moving, setMoving] = useState(false);
+
+    const move = (id: number, direction: 'up' | 'down') => {
+        setMoving(true);
+        router.post(
+            route('profile.items.move', [type, id]),
+            { direction },
+            { preserveScroll: true, preserveState: true, onFinish: () => setMoving(false) },
+        );
+    };
 
     const remove = (id: number, done: () => void) => {
         setRemoving(true);
@@ -100,7 +113,7 @@ export default function ItemSection<T extends { id: number }, F extends FormData
 
             {items.length > 0 && (
                 <ul className="border-t">
-                    {items.map((item) =>
+                    {items.map((item, index) =>
                         editing === item.id ? (
                             <li key={item.id}>
                                 <Editor
@@ -115,7 +128,29 @@ export default function ItemSection<T extends { id: number }, F extends FormData
                         ) : (
                             <li key={item.id} className="flex items-start justify-between gap-3 border-b py-4">
                                 <div className="min-w-0">{summary(item)}</div>
-                                <div className="flex shrink-0 gap-1">
+                                <div className="flex shrink-0 flex-wrap justify-end gap-1">
+                                    {orderable && items.length > 1 && (
+                                        <>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                aria-label={`Move this ${noun} up`}
+                                                disabled={moving || index === 0}
+                                                onClick={() => move(item.id, 'up')}
+                                            >
+                                                <ArrowUp aria-hidden="true" />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                aria-label={`Move this ${noun} down`}
+                                                disabled={moving || index === items.length - 1}
+                                                onClick={() => move(item.id, 'down')}
+                                            >
+                                                <ArrowDown aria-hidden="true" />
+                                            </Button>
+                                        </>
+                                    )}
                                     <Button variant="ghost" size="icon" aria-label={`Edit this ${noun}`} onClick={() => setEditing(item.id)}>
                                         <Pencil aria-hidden="true" />
                                     </Button>

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Honour extends Model
 {
-    protected $fillable = ['title', 'year'];
+    protected $fillable = ['position', 'title', 'year'];
 
     public function profile(): BelongsTo
     {
