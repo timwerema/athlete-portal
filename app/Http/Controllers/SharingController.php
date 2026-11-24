@@ -24,7 +24,7 @@ class SharingController extends Controller
             'link' => $link ? ['url' => $link->url(), 'created_at' => $link->created_at->toDateString()] : null,
             'views' => ViewCounter::summary($link),
             'hideable' => Profile::HIDEABLE,
-            'hiddenSections' => array_values($profile->hidden_sections ?? []),
+            'hiddenSections' => $profile->hidden_sections ?? [],
         ]);
     }
 

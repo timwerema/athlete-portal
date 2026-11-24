@@ -1,11 +1,11 @@
 # Project status
 
-Last updated: 23 November 2026. Product name: Second Half (chosen by Timasi; trademark and domain not yet checked).
+Last updated: 24 November 2026. Product name: Second Half (chosen by Timasi; trademark and domain not yet checked).
 
 ## Implemented and tested
 
-Automated: 174 back-end tests (run on SQLite and on PostgreSQL 16) and 14 front-end unit tests.
-CI on GitHub passes: tests, audits, secret scan, and migrations on MariaDB 11 and PostgreSQL 16.
+Automated: 187 back-end tests (run on SQLite and on PostgreSQL 16) and 14 front-end unit tests.
+CI on GitHub passes: tests, audits, secret scan, static analysis (Larastan level 5), and migrations on MariaDB 11 and PostgreSQL 16.
 Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, dark and light.
 
 | Feature | Automated tests | Checked in browser |
@@ -24,6 +24,9 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 | Download my data, delete my account | yes | yes |
 | Security headers and nonce-based CSP | yes | no violations seen |
 | One labelled sample profile at /demo (seeder) | yes | yes |
+| Reorder teams, honours, videos and references by hand | yes | yes |
+| Email change confirmed by a link to the new address, password required, old address notified | yes | yes (log mailer) |
+| Accessibility: automated axe audit, 144 page checks (every page, dark and light, 390 and 1440 wide), no violations | n/a | yes |
 | Draft privacy notice and terms | n/a | yes |
 
 ## Not verified
@@ -31,14 +34,12 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 - Embedded YouTube/Vimeo players actually playing (this build environment cannot reach those sites; the frame is created with the right address).
 - Hudl embeds: not built. Hudl links show as plain links because no embed address has been verified.
 - Real email delivery (only the log mailer has been used).
-- Real phones and Safari; screen readers. Colour pairs were calculated to meet AA contrast (purple, grey, black, white palette), but no audit tool has been run on the pages.
+- Real phones and Safari; real screen readers (the automated audit cannot judge everything).
 
 ## Planned
 
 - Verified links to official rules pages (none are linked yet, by design)
-- Reorder teams, videos and honours by hand
-- Email change confirmation that does not reveal other accounts
-- Static analysis in CI, accessibility audit
+- Testing with a real screen reader and on real phones
 - Later versions: other sports, high-school recruits with parent consent, coach accounts
 
 ## Decided by Timasi

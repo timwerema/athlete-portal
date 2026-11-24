@@ -54,7 +54,6 @@ jobs:
 
       - name: Static analysis
         run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress --error-format=raw
-        continue-on-error: true
 
       - name: Front-end format, lint and types
         run: |

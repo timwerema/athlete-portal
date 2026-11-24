@@ -37,7 +37,7 @@ class ProfilePresenter
             'gpa_scale' => $profile->gpa_scale,
             'looking_for' => ['levels' => [], 'regions' => [], 'intended_major' => null, 'timeline' => null, ...($profile->looking_for ?? [])],
             'statement' => $profile->statement,
-            'hidden_sections' => array_values($profile->hidden_sections ?? []),
+            'hidden_sections' => $profile->hidden_sections ?? [],
             'teams' => $profile->teams->map->only(['id', 'kind', 'name', 'detail', 'start_year', 'end_year'])->values(),
             'season_stats' => $profile->seasonStats->map->only(['id', 'season', 'team', 'competition', 'stats'])->values(),
             'honours' => $profile->honours->map->only(['id', 'title', 'year'])->values(),

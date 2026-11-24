@@ -37,13 +37,13 @@ Rate limits are defined in `app/Providers/AppServiceProvider.php`.
 2. **Age is self-declared.** A person can lie about their birth date.
 3. **Coaches are not verified.** Anyone with the link can send a message and claim to be a coach. The email and inbox both warn the athlete.
 4. **Encryption depends on `APP_KEY`.** Someone with both the database and the key can read everything. Athlete profile fields themselves (school, stats, statement) are not encrypted.
-5. **Changing email in Settings reveals whether another address is registered** (to a signed-in user, limited to 10 tries a minute).
+5. **Email change links work only while logged in** and for 60 minutes. A new address takes effect only after the link sent to it is opened; the screen gives the same answer whether or not the address is in use, and the old address is told afterwards (`AccountUpdateTest`).
 6. **`style-src-attr 'unsafe-inline'`** is allowed so components can set inline style attributes. Scripts remain strict.
 7. **View counting is approximate.** Bots that look like browsers are counted; two people behind one network with the same browser count once.
 8. **YouTube and Vimeo players** load from those companies and can set their own cookies. No consent prompt exists yet; decide before launch.
 9. **Mail is sent during the request.** If the mail provider is slow, the coach waits. The message is saved first, so it is never lost.
 10. **Developer-only tooling** (ESLint chain) has open `npm audit` advisories. Nothing vulnerable ships to users (`npm audit --omit=dev` is clean as of 23 Nov 2026).
-11. **Not yet done:** static analysis (Larastan/Psalm), a real accessibility audit with assistive technology, load testing, an independent security review.
+11. **Not yet done:** testing with real assistive technology (an automated axe audit passes), load testing, an independent security review.
 
 ## Before production (checklist)
 
@@ -59,6 +59,6 @@ Rate limits are defined in `app/Providers/AppServiceProvider.php`.
 
 ## Keeping it patched
 
-CI runs `composer audit`, `npm audit` and a secret scan on every push. Check for framework and
+CI runs `composer audit`, `npm audit`, a secret scan and Larastan static analysis (level 5) on every push. Check for framework and
 dependency updates monthly, and straight away for security advisories affecting Laravel, Inertia or
 React.
