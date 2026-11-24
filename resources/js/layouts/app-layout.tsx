@@ -30,7 +30,7 @@ export default function AppLayout({ children, width = 'default' }: { children: R
 
             <header className="border-b">
                 <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-6 px-4 sm:px-6">
-                    <Link href={route('dashboard')} aria-label="Overview">
+                    <Link href={route('dashboard')}>
                         <Wordmark />
                     </Link>
 

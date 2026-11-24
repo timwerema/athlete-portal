@@ -36,7 +36,7 @@ class LoginRequest extends FormRequest
         $provider = Auth::getProvider();
         $user = $provider->retrieveByCredentials($this->only('email', 'password'));
 
-        if (! $user || ! $provider->validateCredentials($user, $this->only('password'))) {
+        if (! $user instanceof User || ! $provider->validateCredentials($user, $this->only('password'))) {
             RateLimiter::hit($this->throttleKey(), 300);
 
             throw ValidationException::withMessages([

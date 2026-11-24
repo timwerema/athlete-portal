@@ -57,7 +57,7 @@ function Editor<F extends FormData>({
             className="bg-surface reveal my-4 grid gap-5 rounded-md border p-4 sm:p-6"
             aria-label={id === null ? `Add ${noun}` : `Edit ${noun}`}
         >
-            <h3 className="text-lg font-semibold">{id === null ? `Add ${noun}` : `Edit ${noun}`}</h3>
+            <h2 className="text-lg font-semibold">{id === null ? `Add ${noun}` : `Edit ${noun}`}</h2>
             {fields(form, id !== null)}
             <InputError message={limitError} />
             <div className="flex flex-col gap-3 sm:flex-row">

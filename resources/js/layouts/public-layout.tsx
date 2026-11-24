@@ -19,7 +19,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
             </a>
             <header className="no-print border-b">
                 <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6">
-                    <Link href={route('home')} aria-label="Home">
+                    <Link href={route('home')}>
                         <Wordmark />
                     </Link>
                     <nav aria-label="Account" className="flex items-center gap-1 sm:gap-2">

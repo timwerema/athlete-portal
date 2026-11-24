@@ -38,7 +38,7 @@ class ProfileItemController extends Controller
         $item = $relation->make($this->validated($request, $profile, $type));
 
         if (in_array($type, self::ORDERABLE, true)) {
-            $item->position = ((int) $this->relation($profile, $type)->max('position')) + 1;
+            $item->setAttribute('position', ((int) $this->relation($profile, $type)->max('position')) + 1);
         }
 
         $item->save();
@@ -98,6 +98,7 @@ class ProfileItemController extends Controller
         return back();
     }
 
+    /** @return HasMany<covariant \Illuminate\Database\Eloquent\Model, Profile> */
     private function relation(Profile $profile, string $type): HasMany
     {
         return match ($type) {

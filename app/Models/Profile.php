@@ -9,7 +9,34 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $sport
+ * @property bool $is_demo
+ * @property string|null $display_name
+ * @property string|null $pronouns
+ * @property string|null $photo_path
+ * @property int|null $height_cm
+ * @property string|null $current_school
+ * @property string|null $division
+ * @property string|null $conference
+ * @property string|null $class_year
+ * @property int|null $eligibility_years_left
+ * @property Carbon|null $portal_entered_on
+ * @property array<string, mixed>|null $sport_data
+ * @property string|null $major
+ * @property string|null $gpa
+ * @property string|null $gpa_scale
+ * @property array<string, mixed>|null $looking_for
+ * @property string|null $statement
+ * @property list<string>|null $hidden_sections
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User $user
+ */
 class Profile extends Model
 {
     /** @use HasFactory<ProfileFactory> */
@@ -83,36 +110,43 @@ class Profile extends Model
         return ! in_array($section, $this->hidden_sections ?? [], true);
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @return HasMany<ProfileTeam, $this> */
     public function teams(): HasMany
     {
         return $this->hasMany(ProfileTeam::class)->orderBy('position')->orderBy('id');
     }
 
+    /** @return HasMany<SeasonStat, $this> */
     public function seasonStats(): HasMany
     {
         return $this->hasMany(SeasonStat::class)->orderByDesc('season')->orderBy('id');
     }
 
+    /** @return HasMany<Honour, $this> */
     public function honours(): HasMany
     {
         return $this->hasMany(Honour::class)->orderBy('position')->orderBy('id');
     }
 
+    /** @return HasMany<Video, $this> */
     public function videos(): HasMany
     {
         return $this->hasMany(Video::class)->orderBy('position')->orderBy('id');
     }
 
+    /** @return HasMany<ProfileReference, $this> */
     public function references(): HasMany
     {
         return $this->hasMany(ProfileReference::class)->orderBy('position')->orderBy('id');
     }
 
+    /** @return HasMany<ShareLink, $this> */
     public function shareLinks(): HasMany
     {
         return $this->hasMany(ShareLink::class);
@@ -123,6 +157,7 @@ class Profile extends Model
         return $this->shareLinks()->whereNull('revoked_at')->latest('id')->first();
     }
 
+    /** @return HasMany<ContactMessage, $this> */
     public function messages(): HasMany
     {
         return $this->hasMany(ContactMessage::class)->latest();

@@ -5,8 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
+/**
+ * @property int $id
+ * @property int $profile_id
+ * @property string $token_hash
+ * @property string $token_encrypted
+ * @property Carbon|null $revoked_at
+ * @property Carbon|null $created_at
+ * @property-read Profile $profile
+ */
 class ShareLink extends Model
 {
     protected $hidden = ['token_hash', 'token_encrypted'];
@@ -54,11 +64,13 @@ class ShareLink extends Model
         return route('share.show', ['token' => $this->token()]);
     }
 
+    /** @return BelongsTo<Profile, $this> */
     public function profile(): BelongsTo
     {
         return $this->belongsTo(Profile::class);
     }
 
+    /** @return HasMany<ProfileView, $this> */
     public function views(): HasMany
     {
         return $this->hasMany(ProfileView::class);

@@ -71,7 +71,7 @@ class ProfilePresenter
                 fn ($code) => ['code' => $code, 'label' => $positions[$code] ?? $code],
                 $data['positions'] ?? []
             )),
-            'preferred_foot' => Soccer::FEET[$data['preferred_foot'] ?? ''] ?? null,
+            'preferred_foot' => isset($data['preferred_foot']) ? (Soccer::FEET[$data['preferred_foot']] ?? null) : null,
             'height_cm' => $show('height') ? $profile->height_cm : null,
             'current_school' => $show('school') ? $profile->current_school : null,
             'division' => $show('school') ? $profile->division : null,

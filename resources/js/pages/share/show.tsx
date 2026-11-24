@@ -405,11 +405,9 @@ export default function ShareShow({ profile, mode, contact }: ShowProps) {
             </Head>
 
             {banner[mode] && (
-                <div className="bg-mark text-mark-foreground no-print">
-                    <p className="mx-auto max-w-5xl px-4 py-3 text-sm leading-relaxed sm:px-6" role="note">
-                        {banner[mode]}
-                    </p>
-                </div>
+                <aside aria-label="About this page" className="bg-mark text-mark-foreground no-print">
+                    <p className="mx-auto max-w-5xl px-4 py-3 text-sm leading-relaxed sm:px-6">{banner[mode]}</p>
+                </aside>
             )}
 
             <header className="border-b">
@@ -420,7 +418,7 @@ export default function ShareShow({ profile, mode, contact }: ShowProps) {
                             Back to editing
                         </Link>
                     ) : mode === 'demo' ? (
-                        <Link href={route('home')} aria-label="Home">
+                        <Link href={route('home')}>
                             <Wordmark />
                         </Link>
                     ) : (

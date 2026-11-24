@@ -47,7 +47,7 @@ class PublicProfileController extends Controller
     {
         $link = ShareLink::findActive($token);
 
-        abort_unless($link && $link->profile->shows('photo'), 404);
+        abort_unless($link !== null && $link->profile->shows('photo'), 404);
 
         return ProfileController::servePhoto($link->profile);
     }
@@ -56,7 +56,7 @@ class PublicProfileController extends Controller
     {
         $link = ShareLink::findActive($token);
 
-        abort_unless($link, 404);
+        abort_unless($link !== null, 404);
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:120'],
@@ -109,7 +109,7 @@ class PublicProfileController extends Controller
     {
         $profile = Profile::query()->where('is_demo', true)->first();
 
-        abort_unless($profile, 404);
+        abort_unless($profile !== null, 404);
 
         return Inertia::render('share/show', [
             'profile' => ProfilePresenter::forCoach($profile, null),

@@ -7,7 +7,7 @@ export default function AuthLayout({ title, description, children }: { title: st
         <div className="flex min-h-dvh flex-col">
             <header className="border-b">
                 <div className="mx-auto flex h-14 max-w-5xl items-center px-4 sm:px-6">
-                    <Link href={route('home')} aria-label="Home">
+                    <Link href={route('home')}>
                         <Wordmark />
                     </Link>
                 </div>
