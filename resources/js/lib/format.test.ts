@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { OFFICIAL_SOURCES } from '../components/official-sources';
 import { readAppearance, resolvesToDark } from '../hooks/use-appearance-logic';
 import { cmToFeetInches, feetInchesToCm, formatDate, formatHeight, formatStat, formatYears, initials } from './format';
 import { fitWithin } from './shrink-image';
@@ -98,5 +99,17 @@ describe('photo shrinking', () => {
         expect(fitWithin(3000, 4000, 1600)).toEqual({ width: 1200, height: 1600 });
         expect(fitWithin(800, 600, 1600)).toEqual({ width: 800, height: 600 });
         expect(fitWithin(5000, 1, 1600)).toEqual({ width: 1600, height: 1 });
+    });
+});
+
+describe('official sources', () => {
+    it('only links to the governing bodies over https', () => {
+        const allowed = ['www.ncaa.org', 'play.mynaia.org', 'www.naia.org', 'www.njcaa.org'];
+
+        for (const source of OFFICIAL_SOURCES) {
+            const url = new URL(source.url);
+            expect(url.protocol).toBe('https:');
+            expect(allowed).toContain(url.hostname);
+        }
     });
 });

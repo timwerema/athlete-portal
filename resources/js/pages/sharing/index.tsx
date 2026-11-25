@@ -1,5 +1,6 @@
 import ConfirmAction from '@/components/confirm-action';
 import Notice from '@/components/notice';
+import OfficialSources from '@/components/official-sources';
 import PageHeader from '@/components/page-header';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -201,6 +202,7 @@ export default function Sharing({ link, views, hideable, hiddenSections }: Shari
                 themselves. Rules about when coaches may talk to you differ by division and change; your school&apos;s compliance office can tell you
                 what applies to you.
             </Notice>
+            <OfficialSources className="mt-12" />
         </AppLayout>
     );
 }

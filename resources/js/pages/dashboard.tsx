@@ -1,4 +1,5 @@
 import Notice from '@/components/notice';
+import OfficialSources from '@/components/official-sources';
 import PageHeader from '@/components/page-header';
 import { buttonVariants } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
@@ -152,6 +153,7 @@ export default function Dashboard({ displayName, completeness, link, views, unre
                 This is not the official NCAA Transfer Portal and making a profile here does not enter you into it. Transfer and contact rules differ
                 by division and change often. If you are unsure what you are allowed to do, ask your school&apos;s compliance office first.
             </Notice>
+            <OfficialSources className="mt-12" />
         </AppLayout>
     );
 }

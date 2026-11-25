@@ -1,6 +1,6 @@
 # Project status
 
-Last updated: 24 November 2026. Product name: Second Half (chosen by Timasi; trademark and domain not yet checked).
+Last updated: 25 November 2026. Product name: Second Half (chosen by Timasi; trademark and domain not yet checked).
 
 ## Implemented and tested
 
@@ -26,6 +26,7 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 | One labelled sample profile at /demo (seeder) | yes | yes |
 | Reorder teams, honours, videos and references by hand | yes | yes |
 | Email change confirmed by a link to the new address, password required, old address notified | yes | yes (log mailer) |
+| Official sources list (NCAA transfer rules page, NAIA Eligibility Center) on Overview and Sharing. Links opened and confirmed by Timasi on 25 Nov 2026; the build environment could not reach them | host check only | yes |
 | Accessibility: automated axe audit, 144 page checks (every page, dark and light, 390 and 1440 wide), no violations | n/a | yes |
 | Draft privacy notice and terms | n/a | yes |
 
@@ -38,7 +39,7 @@ Browser: a scripted walk through the real app in Chromium at 390 and 1440 wide, 
 
 ## Planned
 
-- Verified links to official rules pages (none are linked yet, by design)
+- Official link for the NJCAA, and the NCAA "Want to Transfer?" page: both failed to load when Timasi checked on 25 Nov 2026, so they are not linked
 - Testing with a real screen reader and on real phones
 - Later versions: other sports, high-school recruits with parent consent, coach accounts
 
